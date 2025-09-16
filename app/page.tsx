@@ -1,0 +1,585 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  ShieldCheckIcon,
+  ChartBarIcon,
+  CurrencyDollarIcon,
+  ArrowRightIcon,
+  SparklesIcon,
+  EyeIcon,
+  CpuChipIcon,
+  LightBulbIcon,
+} from "@heroicons/react/24/outline";
+
+const features = [
+  {
+    icon: ShieldCheckIcon,
+    title: "Fraud Detection",
+    description:
+      "Real-time transaction monitoring dengan AI yang mendeteksi pola mencurigakan secara otomatis",
+    price: "Rp 99.000",
+    period: "/bulan",
+    color: "red",
+  },
+  {
+    icon: ChartBarIcon,
+    title: "Sales Forecasting",
+    description:
+      "Prediksi penjualan akurat dengan insights mendalam dan analisis tren comprehensive",
+    price: "Rp 149.000",
+    period: "/bulan",
+    color: "blue",
+  },
+  {
+    icon: SparklesIcon,
+    title: "End-to-End",
+    description:
+      "Solusi lengkap dengan semua fitur AI, chatbot advanced, dan integrasi seamless",
+    price: "Rp 249.000",
+    period: "/bulan",
+    color: "green",
+  },
+];
+
+const featureHighlights = [
+  {
+    icon: ChartBarIcon,
+    title: "Sales Forecasting",
+    description: "Prediksi akurat untuk planning bisnis",
+  },
+  {
+    icon: ShieldCheckIcon,
+    title: "Fraud Detection",
+    description: "Deteksi real-time untuk keamanan maksimal",
+  },
+  {
+    icon: CurrencyDollarIcon,
+    title: "Auto Budgeting",
+    description: "Otomatisasi cerdas untuk efisiensi optimal",
+  },
+  {
+    icon: CpuChipIcon,
+    title: "AI Chatbot",
+    description: "Assistant pintar untuk insights mendalam",
+  },
+];
+
+export default function LandingPage() {
+  const [currentFeature, setCurrentFeature] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    setIsVisible(true);
+    const interval = setInterval(() => {
+      setCurrentFeature((prev) => (prev + 1) % features.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen relative bg-white">
+      <div className="fixed inset-0 animated-grid opacity-30" />
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-1/10 via-transparent to-green-1/10" />
+
+      {isMounted && (
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-blue-4 rounded-full opacity-20"
+              initial={{
+                x:
+                  Math.random() *
+                  (typeof window !== "undefined" ? window.innerWidth : 1000),
+                y:
+                  Math.random() *
+                  (typeof window !== "undefined" ? window.innerHeight : 1000),
+              }}
+              animate={{
+                y: [0, -100, 0],
+                x: [0, Math.random() * 100 - 50, 0],
+                opacity: [0.2, 0.8, 0.2],
+              }}
+              transition={{
+                duration: Math.random() * 10 + 5,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Navbar */}
+      <nav className="relative z-50 bg-yellow-500 shadow-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center space-x-3"
+            >
+              <Image
+                src="/composite.png"
+                alt="Composite Logo"
+                width={150}
+                height={100}
+                priority
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center space-x-6"
+            >
+              <Link
+                href="/login"
+              className="text-black hover:text-gray-800 transition-colors font-bold"
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                className="bg-white text-black hover:bg-gray-200 px-6 py-2 rounded-lg font-medium
+                transition-all duration-700 ease-in-out transform hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                Get Started
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative z-40 pt-20 pb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+              <span className="text-black">Business Intelligence</span>
+              <br />
+              <span className="text-black">Redefined by AI</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-palantir-gray-2 mb-12 max-w-4xl mx-auto leading-relaxed">
+              Platform AI terdepan untuk deteksi fraud real-time, forecasting
+              penjualan akurat, dan budgeting otomatis yang mengubah cara
+              perusahaan mengelola data bisnis
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <Link
+                href="/register"
+                className="bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-4 rounded-xl font-semibold text-lg flex items-center space-x-2 group transition-colors duration-300 ease-in-out"
+              >
+                <span>Mulai Sekarang</span>
+                <ArrowRightIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300 ease-in-out" />
+              </Link>
+              <Link
+                href="#demo"
+                className="bg-black hover:bg-gray-800 text-white px-8 py-4 rounded-xl font-semibold text-lg flex items-center space-x-2 transition-colors duration-300 ease-in-out"
+              >
+                <EyeIcon className="w-5 h-5" />
+                <span>Lihat Demo</span>
+              </Link>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-24"
+          >
+            {featureHighlights.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 + index * 0.1 }}
+                className="p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300 bg-black shadow-lg"
+              >
+                <div className="bg-yellow-500 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <feature.icon className="w-6 h-6 text-black" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-palantir-gray-4 text-sm">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      <section id="features" className="relative z-40 py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <span className="text-black">Three Powerful</span>
+              <br />
+              <span className="text-black">AI Solutions</span>
+            </h2>
+            <p className="text-xl text-palantir-gray-2 max-w-3xl mx-auto">
+              Setiap fitur dirancang khusus untuk memberikan insights yang
+              actionable dan otomatisasi yang intelligent
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2, duration: 0.8 }}
+                className="group"
+              >
+                <div className="bg-black p-8 rounded-2xl card-hover h-full flex flex-col shadow-lg">
+                  <div
+                    className={`w-16 h-16 bg-gradient-to-br ${
+                      feature.color === "red"
+                        ? "from-red-3 to-red-4"
+                        : feature.color === "blue"
+                        ? "from-blue-3 to-blue-4"
+                        : "from-green-3 to-green-4"
+                    } rounded-xl flex items-center justify-center mb-6 feature-icon`}
+                  >
+                    <feature.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-4">
+                    {feature.title}
+                  </h3>
+                  <p className="text-palantir-gray-3 mb-6 leading-relaxed flex-grow">
+                    {feature.description}
+                  </p>
+
+                  <div className="text-center mb-6">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <span className="text-3xl font-bold text-white">
+                        {feature.price}
+                      </span>
+                      <span className="text-palantir-gray-4">
+                        {feature.period}
+                      </span>
+                    </div>
+                  </div>
+
+<Link
+  href={`/subscribe?plan=${feature.title
+    .toLowerCase()
+    .replace(" ", "-")}`}
+  className="px-6 py-3 rounded-lg font-medium bg-yellow-500 text-black text-center transition-all duration-300 hover:bg-yellow-600 hover:scale-105"
+>
+  Pilih Plan
+</Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-40 py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <span className="text-black">AI Chatbot</span>
+              <br />
+              <span className="text-black">Revolutionary</span>
+            </h2>
+            <p className="text-xl text-palantir-gray-2 max-w-3xl mx-auto">
+              Chatbot AI yang tidak seperti yang lain - dirancang khusus untuk
+              business intelligence dengan kemampuan analisis mendalam
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-blue-4 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <LightBulbIcon className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-black mb-2">
+                      Contextual Analysis
+                    </h3>
+                    <p className="text-palantir-gray-2">
+                      Memahami konteks bisnis Anda dan memberikan insights yang
+                      relevan berdasarkan data real-time
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-green-3 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <ChartBarIcon className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-black mb-2">
+                      Interactive Visualizations
+                    </h3>
+                    <p className="text-palantir-gray-2">
+                      Buat dan modifikasi chart secara real-time melalui
+                      percakapan natural
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-orange-3 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <CpuChipIcon className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-black mb-2">
+                      Predictive Recommendations
+                    </h3>
+                    <p className="text-palantir-gray-2">
+                      Rekomendasi actionable berdasarkan pattern recognition dan
+                      machine learning
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="dashboard-card p-6 rounded-2xl"
+            >
+              <div className="bg-palantir-dark-gray-3 rounded-xl p-4 h-96 overflow-hidden">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-3 h-3 bg-red-4 rounded-full"></div>
+                  <div className="w-3 h-3 bg-orange-4 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-4 rounded-full"></div>
+                  <span className="text-sm text-palantir-gray-4 ml-4">
+                    Composite Assistant
+                  </span>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Image
+                        src="/logo.png"   // nama file di folder public
+                        alt="Logo"
+                        width={50}
+                        height={50}
+                        className="object-contain"
+                      />
+                      </div>
+                    <div className="bg-palantir-dark-gray-2 rounded-lg p-3 max-w-xs">
+                      <p className="text-sm text-white">
+                        Halo! Saya melihat ada anomali dalam transaksi hari ini.
+                        Apakah Anda ingin saya analisis lebih detail?
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3 justify-end">
+                    <div className="bg-blue-4 rounded-lg p-3 max-w-xs">
+                      <p className="text-sm text-white">
+                        Ya, tolong tampilkan breakdown transaksi mencurigakan
+                        dalam 24 jam terakhir
+                      </p>
+                    </div>
+                    <div className="w-8 h-8 bg-palantir-gray-3 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-bold text-white">You</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="rounded-lg flex items-center justify-center flex-shrink-0">
+                      <div className="rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Image
+                        src="/logo.png"   // nama file di folder public
+                        alt="Logo"
+                        width={50}
+                        height={50}
+                        className="object-contain"
+                      />
+                      </div>
+                    </div>
+                    <div className="bg-palantir-dark-gray-2 rounded-lg p-3 flex-1">
+                      <p className="text-sm text-white mb-2">
+                        Ditemukan 12 transaksi mencurigakan dengan total Rp
+                        847.500.000
+                      </p>
+                      <div className="bg-palantir-dark-gray-4 rounded p-2 text-xs">
+                        <div className="flex justify-between mb-1">
+                          <span className="text-palantir-gray-4">
+                            Risk Level: High
+                          </span>
+                          <span className="text-red-4 font-bold">●</span>
+                        </div>
+                        <div className="w-full bg-palantir-dark-gray-5 rounded-full h-2">
+                          <div className="bg-red-4 h-2 rounded-full w-3/4"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-40 py-32">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="dashboard-card p-12 rounded-3xl"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
+              Ready to Transform Your Business?
+            </h2>
+            <p className="text-xl text-palantir-gray-2 mb-8">
+              Bergabung dengan 500+ perusahaan yang telah meningkatkan efisiensi
+              bisnis mereka dengan Composite
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/contact"
+              className="px-10 py-4 rounded-xl font-semibold text-lg bg-black text-white hover:bg-gray-900 transition"
+            >
+              Talk to Sales
+            </Link>
+
+            <Link
+              href="/trial"
+              className="px-10 py-4 rounded-xl font-semibold text-lg bg-yellow-500 text-black hover:bg-yellow-600 transition
+              transition-all duration-700 ease-in-out transform hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              Start Free Trial
+            </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <footer className="relative z-40 border-t border-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="rounded-lg flex items-center justify-center">
+                      <Image
+                        src="/compositeOG.png"   // nama file di folder public
+                        alt="Logo"
+                        width={150}
+                        height={150}
+                        className="object-contain"
+                      />
+                </div>
+              </div>
+              <p className="text-palantir-gray-2 text-sm">
+                Transforming business intelligence with cutting-edge AI
+                technology.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-black mb-4">Product</h3>
+              <ul className="space-y-2 text-sm text-palantir-gray-4">
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    Fraud Detection
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    Sales Forecasting
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    AutoBudgeting
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    AI Chatbot
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-black mb-4">Company</h3>
+              <ul className="space-y-2 text-sm text-palantir-gray-4">
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    Careers
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    Support
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-black mb-4">Legal</h3>
+              <ul className="space-y-2 text-sm text-palantir-gray-4">
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-black transition-colors">
+                    Security
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-palantir-dark-gray-3 mt-8 pt-8 text-center">
+            <p className="text-palantir-gray-4 text-sm">
+              © 2025 Composite. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
