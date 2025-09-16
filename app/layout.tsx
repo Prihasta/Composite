@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PointerAI - Advanced Business Co-Pilot",
+  title: "Composite - Advanced Business Co-Pilot",
   description:
     "AI-powered business intelligence platform with fraud detection, sales forecasting, and automated budgeting",
   keywords:

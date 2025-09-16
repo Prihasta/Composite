@@ -90,7 +90,7 @@ export default function SubscribePage() {
                 <CpuChipIcon className="w-6 h-6 text-white" />
               </div>
               <span className="text-2xl font-bold gradient-text">
-                PointerAI
+                Composite
               </span>
             </Link>
             <div className="flex items-center space-x-6">
@@ -342,8 +342,8 @@ export default function SubscribePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <p className="text-palantir-gray-4 text-sm">
-              © 2025 PointerAI. All rights reserved. Questions? Contact us at
-              support@pointerai.com
+              © 2025 Composite. All rights reserved. Questions? Contact us at
+              support@composite.com
             </p>
           </div>
         </div>
