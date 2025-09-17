@@ -297,12 +297,12 @@ export default function SalesForecastingPage() {
               <ChartBarIcon className="w-7 h-7 text-blue-4" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">
+              {/* <h1 className="text-3xl font-bold text-white">
                 Sales Forecasting
               </h1>
               <p className="text-palantir-gray-3">
                 Advanced predictive analytics and market insights
-              </p>
+              </p> */}
             </div>
           </div>
 

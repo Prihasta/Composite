@@ -180,8 +180,8 @@ export default function DashboardLayout({
               >
                 <Bars3Icon className="w-6 h-6" />
               </button>
-              <div>
-                <h1 className="text-2xl font-bold text-white">
+              {/* <div>
+                <h1 className="font-bold text-white text-lg sm:text-xl md:text-2xl">
                   {pathname === "/dashboard" && "Dashboard Overview"}
                   {pathname === "/dashboard/fraud" && "Fraud Detection"}
                   {pathname === "/dashboard/sales" && "Sales Forecasting"}
@@ -189,23 +189,35 @@ export default function DashboardLayout({
                   {pathname === "/dashboard/chat" && "AI Assistant"}
                   {pathname === "/dashboard/settings" && "Settings"}
                 </h1>
-                <p className="text-palantir-gray-3 text-sm">
+                <p className="text-palantir-gray-3 text-xs sm:text-sm truncate max-w-[200px] sm:max-w-xs md:max-w-sm">
                   Warung Bakmie Sederhana
                 </p>
-              </div>
+              </div> */}
+              
+            </div>
+            <div className="flex items-center space-x-4">
+            <div
+              className="
+                relative
+                ml-2 sm:ml-4 md:ml-6 lg:ml-8
+              "
+            >
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-palantir-gray-4" />
+              <input
+                type="text"
+                placeholder="Cari..."
+                className="
+                  w-full sm:w-48 md:w-56 lg:w-64
+                  pl-10 pr-4 py-2
+                  bg-palantir-dark-gray-3 border border-palantir-dark-gray-4
+                  rounded-lg text-white placeholder-palantir-gray-4
+                  focus:border-blue-4 focus:ring-1 focus:ring-blue-4
+                  transition-colors
+                "
+              />
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-palantir-gray-4" />
-                <input
-                  type="text"
-                  placeholder="Cari..."
-                  className="pl-10 pr-4 py-2 bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-lg text-white placeholder-palantir-gray-4 focus:border-blue-4 focus:ring-1 focus:ring-blue-4 transition-colors w-64"
-                />
-              </div>
-
-              <div className="relative">
+            <div className="relative">
                 <button
                   onClick={() => setShowNotifications(!showNotifications)}
                   className="relative p-2 text-palantir-gray-4 hover:text-white transition-colors"
@@ -216,12 +228,18 @@ export default function DashboardLayout({
 
                 <AnimatePresence>
                   {showNotifications && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="absolute right-0 mt-2 w-80 dashboard-card rounded-xl shadow-lg z-20"
-                    >
+                      <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                      className="
+                        dashboard-card 
+                        p-4 sm:p-6 lg:p-8
+                        rounded-xl sm:rounded-2xl 
+                        w-full max-w-full
+                        md:max-w-2xl lg:max-w-4xl
+                        min-h-[400px] sm:min-h-[450px] lg:min-h-[500px]"
+                      >
                       <div className="p-4 border-b border-palantir-dark-gray-4">
                         <h3 className="font-bold text-white">Notifikasi</h3>
                       </div>

@@ -1,3 +1,4 @@
+
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,6 +22,8 @@ import {
   ShoppingCartIcon,
   FireIcon,
   BellIcon,
+  Bars3Icon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import type { ApexOptions } from "apexcharts";
 
@@ -143,6 +146,7 @@ export default function AIChatPage() {
   const [message, setMessage] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentChatHistory, setCurrentChatHistory] =
     useState<ChatMessage[]>(chatHistory);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -155,6 +159,24 @@ export default function AIChatPage() {
   useEffect(() => {
     scrollToBottom();
   }, [currentChatHistory]);
+
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const sidebar = document.getElementById('mobile-sidebar');
+      const menuButton = document.getElementById('menu-button');
+      
+      if (isSidebarOpen && sidebar && !sidebar.contains(event.target as Node) && 
+          menuButton && !menuButton.contains(event.target as Node)) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSidebarOpen]);
 
   const handleSendMessage = async () => {
     if (!message.trim()) return;
@@ -201,6 +223,7 @@ export default function AIChatPage() {
 
   const handlePromptClick = (prompt: any) => {
     setMessage(prompt.text);
+    setIsSidebarOpen(false); // Close sidebar after selecting prompt on mobile
     inputRef.current?.focus();
   };
 
@@ -297,15 +320,39 @@ export default function AIChatPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-120px)] flex bg-transparent relative">
+    <div className="h-[calc(100vh-120px)] md:h-[calc(100vh-120px)] flex bg-transparent relative">
       <div className="absolute inset-0 bg-white backdrop-blur-sm"></div>
 
-      <div className="w-80 bg-black border-r border-palantir-dark-gray-4 flex flex-col relative z-10">
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden" />
+      )}
+
+      {/* Sidebar */}
+      <div
+        id="mobile-sidebar"
+        className={`
+          fixed lg:static top-0 left-0 h-full w-80 max-w-[85vw] 
+          bg-black border-r border-palantir-dark-gray-4 flex flex-col 
+          z-30 transform transition-transform duration-300 ease-in-out
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}
+      >
+        {/* Mobile close button */}
+        <div className="lg:hidden flex justify-end p-4">
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="p-2 text-palantir-gray-4 hover:text-white transition-colors rounded-lg hover:bg-palantir-dark-gray-3"
+          >
+            <XMarkIcon className="w-6 h-6" />
+          </button>
+        </div>
+
         <div className="p-6 border-b border-palantir-dark-gray-4">
           <div className="flex items-center space-x-3 mb-4">
             <div className="flex items-center justify-center">
               <Image
-                src="/logo.png"   // nama file di folder public
+                src="/logo.png"
                 alt="Logo"
                 width={50}
                 height={50}
@@ -372,10 +419,21 @@ export default function AIChatPage() {
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col relative z-10">
-        <div className="dashboard-card border-b border-palantir-dark-gray-4 px-6 py-4">
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col relative z-10 w-full lg:w-auto">
+        {/* Header */}
+        <div className="dashboard-card border-b border-palantir-dark-gray-4 px-4 md:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
+              {/* Mobile menu button */}
+              <button
+                id="menu-button"
+                onClick={() => setIsSidebarOpen(true)}
+                className="lg:hidden p-2 text-palantir-gray-4 hover:text-white transition-colors rounded-lg hover:bg-palantir-dark-gray-3"
+              >
+                <Bars3Icon className="w-6 h-6" />
+              </button>
+
               <div className="flex items-center space-x-3">
                 <div className="flex items-center justify-center">
                   <Image
@@ -384,13 +442,13 @@ export default function AIChatPage() {
                     width={40}
                     height={40}
                     className="object-contain rounded-xl"
-                    />
+                  />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-black">
+                  <h2 className="text-lg md:text-xl font-bold text-black">
                     AI Business Assistant
                   </h2>
-                  <p className="text-sm text-palantir-gray-3">
+                  <p className="text-xs md:text-sm text-palantir-gray-3">
                     {isTyping
                       ? "AI sedang berpikir..."
                       : "Siap membantu analisis bisnis Anda"}
@@ -398,7 +456,9 @@ export default function AIChatPage() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            
+            {/* Action buttons - hidden on small screens */}
+            <div className="hidden md:flex items-center space-x-2">
               <button className="p-2 text-palantir-gray-4 hover:text-white transition-colors rounded-lg hover:bg-palantir-dark-gray-3">
                 <BookmarkIcon className="w-5 h-5" />
               </button>
@@ -412,7 +472,8 @@ export default function AIChatPage() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        {/* Messages Area */}
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
           <AnimatePresence>
             {currentChatHistory.map((chat) => (
               <motion.div
@@ -425,35 +486,33 @@ export default function AIChatPage() {
                 }`}
               >
                 <div
-                  className={`max-w-4xl ${
+                  className={`max-w-full md:max-w-4xl ${
                     chat.type === "user" ? "order-2" : "order-1"
                   }`}
                 >
                   <div
-                    className={`flex items-start space-x-3 ${
+                    className={`flex items-start space-x-2 md:space-x-3 ${
                       chat.type === "user"
                         ? "flex-row-reverse space-x-reverse"
                         : ""
                     }`}
                   >
                     <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                        chat.type === "user"
-                          ? ""
-                          : ""
+                      className={`w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                        chat.type === "user" ? "" : ""
                       }`}
                     >
                       {chat.type === "user" ? (
-                        <span className="text-sm font-bold text-blue-4">
+                        <span className="text-xs md:text-sm font-bold text-blue-4">
                           You
                         </span>
                       ) : (
                         <Image
                           src="/logoblack.png"
                           alt="Logo"
-                          width={40}
-                          height={40}
-                          className="object-contain rounded-xl"
+                          width={32}
+                          height={32}
+                          className="md:w-10 md:h-10 object-contain rounded-xl"
                         />
                       )}
                     </div>
@@ -466,29 +525,29 @@ export default function AIChatPage() {
                       <div
                         className={`inline-block max-w-full ${
                           chat.type === "user"
-                            ? "bg-blue-4 text-white rounded-2xl rounded-tr-md px-4 py-3"
-                            : "bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 text-white rounded-2xl rounded-tl-md px-4 py-3"
+                            ? "bg-blue-4 text-white rounded-2xl rounded-tr-md px-3 md:px-4 py-2 md:py-3"
+                            : "bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 text-white rounded-2xl rounded-tl-md px-3 md:px-4 py-2 md:py-3"
                         }`}
                       >
-                        <p className="text-sm leading-relaxed">
+                        <p className="text-sm leading-relaxed break-words">
                           {chat.message}
                         </p>
                       </div>
 
                       {chat.type === "ai" && chat.insights && (
-                        <div className="mt-4 bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-xl p-4">
+                        <div className="mt-4 bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-xl p-3 md:p-4">
                           <h4 className="font-medium text-white mb-3 flex items-center space-x-2">
                             <LightBulbIcon className="w-4 h-4 text-blue-4" />
-                            <span>Key Insights</span>
+                            <span className="text-sm md:text-base">Key Insights</span>
                           </h4>
                           <ul className="space-y-2">
                             {chat.insights.map((insight, idx) => (
                               <li
                                 key={idx}
-                                className="flex items-start space-x-2 text-sm text-palantir-gray-3"
+                                className="flex items-start space-x-2 text-xs md:text-sm text-palantir-gray-3"
                               >
                                 <CheckCircleIcon className="w-4 h-4 text-green-4 mt-0.5 flex-shrink-0" />
-                                <span>{insight}</span>
+                                <span className="break-words">{insight}</span>
                               </li>
                             ))}
                           </ul>
@@ -496,46 +555,48 @@ export default function AIChatPage() {
                       )}
 
                       {chat.type === "ai" && chat.hasChart && (
-                        <div className="mt-4 bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-xl p-4">
+                        <div className="mt-4 bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-xl p-3 md:p-4">
                           <div className="flex items-center justify-between mb-3">
                             <h4 className="font-medium text-white flex items-center space-x-2">
                               <ChartBarIcon className="w-4 h-4 text-blue-4" />
-                              <span>Data Visualization</span>
+                              <span className="text-sm md:text-base">Data Visualization</span>
                             </h4>
                             <button className="text-blue-4 hover:text-blue-5 text-sm transition-colors">
                               <EyeIcon className="w-4 h-4" />
                             </button>
                           </div>
-                          {chat.chartType === "sales" && (
-                            <Chart
-                              options={salesChartOptions}
-                              series={[
-                                {
-                                  name: "Penjualan Harian",
-                                  data: [850, 920, 780, 1100, 1250, 1400, 950],
-                                },
-                              ]}
-                              type="area"
-                              height={200}
-                            />
-                          )}
-                          {chat.chartType === "forecast" && (
-                            <Chart
-                              options={forecastChartOptions}
-                              series={[
-                                {
-                                  name: "Aktual",
-                                  data: [1250, null, null, null, null],
-                                },
-                                {
-                                  name: "Prediksi",
-                                  data: [null, 1350, 1400, 1750, 1650],
-                                },
-                              ]}
-                              type="line"
-                              height={200}
-                            />
-                          )}
+                          <div className="w-full overflow-x-auto">
+                            {chat.chartType === "sales" && (
+                              <Chart
+                                options={salesChartOptions}
+                                series={[
+                                  {
+                                    name: "Penjualan Harian",
+                                    data: [850, 920, 780, 1100, 1250, 1400, 950],
+                                  },
+                                ]}
+                                type="area"
+                                height={200}
+                              />
+                            )}
+                            {chat.chartType === "forecast" && (
+                              <Chart
+                                options={forecastChartOptions}
+                                series={[
+                                  {
+                                    name: "Aktual",
+                                    data: [1250, null, null, null, null],
+                                  },
+                                  {
+                                    name: "Prediksi",
+                                    data: [null, 1350, 1400, 1750, 1650],
+                                  },
+                                ]}
+                                type="line"
+                                height={200}
+                              />
+                            )}
+                          </div>
                         </div>
                       )}
 
@@ -544,7 +605,7 @@ export default function AIChatPage() {
                           {chat.actions.map((action, idx) => (
                             <button
                               key={idx}
-                              className="px-3 py-2 bg-palantir-dark-gray-4 text-palantir-gray-3 rounded-lg text-sm hover:bg-palantir-dark-gray-5 hover:text-white transition-colors"
+                              className="px-2 md:px-3 py-1 md:py-2 bg-palantir-dark-gray-4 text-palantir-gray-3 rounded-lg text-xs md:text-sm hover:bg-palantir-dark-gray-5 hover:text-white transition-colors"
                             >
                               {action}
                             </button>
@@ -571,11 +632,11 @@ export default function AIChatPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex justify-start"
               >
-                <div className="flex items-start space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-4 to-blue-5 rounded-xl flex items-center justify-center">
-                    <CpuChipIcon className="w-5 h-5 text-white" />
+                <div className="flex items-start space-x-2 md:space-x-3">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-4 to-blue-5 rounded-xl flex items-center justify-center">
+                    <CpuChipIcon className="w-4 h-4 md:w-5 md:h-5 text-white" />
                   </div>
-                  <div className="bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-2xl rounded-tl-md px-4 py-3">
+                  <div className="bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-2xl rounded-tl-md px-3 md:px-4 py-2 md:py-3">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-blue-4 rounded-full animate-bounce"></div>
                       <div
@@ -595,8 +656,9 @@ export default function AIChatPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="border-t border-palantir-dark-gray-4 p-6 bg-palantir-dark-gray-2">
-          <div className="flex items-end space-x-4">
+        {/* Input Area */}
+        <div className="border-t border-palantir-dark-gray-4 p-4 md:p-6 bg-palantir-dark-gray-2">
+          <div className="flex items-end space-x-2 md:space-x-4">
             <div className="flex-1">
               <div className="relative">
                 <textarea
@@ -610,23 +672,23 @@ export default function AIChatPage() {
                     }
                   }}
                   placeholder="Tanya tentang penjualan, stok, menu, atau analisis bisnis warung..."
-                  className="w-full px-4 py-3 pr-24 bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-xl text-white placeholder-palantir-gray-4 focus:border-blue-4 focus:ring-1 focus:ring-blue-4 transition-colors resize-none"
+                  className="w-full px-3 md:px-4 py-2 md:py-3 pr-20 md:pr-24 bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-xl text-white placeholder-palantir-gray-4 focus:border-blue-4 focus:ring-1 focus:ring-blue-4 transition-colors resize-none text-sm md:text-base"
                   rows={1}
-                  style={{ minHeight: "48px", maxHeight: "120px" }}
+                  style={{ minHeight: "40px", maxHeight: "120px" }}
                 />
-                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1 md:space-x-2">
                   <button
                     onClick={handleVoiceInput}
-                    className={`p-2 rounded-lg transition-colors ${
+                    className={`p-1.5 md:p-2 rounded-lg transition-colors ${
                       isListening
                         ? "bg-red-4 text-white"
                         : "text-palantir-gray-4 hover:text-white hover:bg-palantir-dark-gray-4"
                     }`}
                   >
-                    <MicrophoneIcon className="w-6 h-6" />
+                    <MicrophoneIcon className="w-5 h-5 md:w-6 md:h-6" />
                   </button>
-                  <button className="p-2 text-palantir-gray-4 hover:text-white hover:bg-palantir-dark-gray-4 rounded-lg transition-colors">
-                    <PhotoIcon className="w-6 h-6" />
+                  <button className="p-1.5 md:p-2 text-palantir-gray-4 hover:text-white hover:bg-palantir-dark-gray-4 rounded-lg transition-colors">
+                    <PhotoIcon className="w-5 h-5 md:w-6 md:h-6" />
                   </button>
                 </div>
               </div>
@@ -636,25 +698,26 @@ export default function AIChatPage() {
               disabled={!message.trim() || isTyping}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-yellow-500 p-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-yellow-500 p-2 md:p-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <PaperAirplaneIcon className="w-5 h-6" />
+              <PaperAirplaneIcon className="w-4 h-4 md:w-5 md:h-6" />
             </motion.button>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            {quickPrompts.slice(0, 3).map((prompt, index) => (
+          {/* Quick prompts - show fewer on mobile */}
+          <div className="mt-3 md:mt-4 flex flex-wrap gap-2">
+            {quickPrompts.slice(0, window.innerWidth < 768 ? 2 : 3).map((prompt, index) => (
               <button
                 key={index}
                 onClick={() => handlePromptClick(prompt)}
-                className="px-3 py-2 bg-palantir-dark-gray-3 text-palantir-gray-3 rounded-lg text-sm hover:bg-palantir-dark-gray-4 hover:text-white transition-colors border border-palantir-dark-gray-4"
+                className="px-2 md:px-3 py-1.5 md:py-2 bg-palantir-dark-gray-3 text-palantir-gray-3 rounded-lg text-xs md:text-sm hover:bg-palantir-dark-gray-4 hover:text-white transition-colors border border-palantir-dark-gray-4 truncate"
               >
                 {prompt.text}
               </button>
             ))}
           </div>
 
-          <div className="mt-3 text-xs text-palantir-gray-4 text-center">
+          <div className="mt-2 md:mt-3 text-xs text-palantir-gray-4 text-center px-2">
             AI responses berdasarkan data bisnis warung Anda. Selalu verifikasi
             keputusan penting.
           </div>

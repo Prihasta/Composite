@@ -197,6 +197,7 @@ export default function FraudDetectionPage() {
                   </span>
                 </div>
               </div>
+              
               <div
                 className={`w-12 h-12 bg-${metric.color}-4/20 rounded-lg flex items-center justify-center`}
               >

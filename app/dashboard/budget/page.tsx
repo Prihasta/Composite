@@ -235,34 +235,69 @@ export default function AutoBudgetingPage() {
             <div className="w-12 h-12 bg-green-4/20 rounded-xl flex items-center justify-center">
               <CurrencyDollarIcon className="w-7 h-7 text-green-4" />
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-white">AutoBudgeting</h1>
-              <p className="text-palantir-gray-3">
+            <div className="px-2 sm:px-4 md:px-6 lg:px-8">
+              {/* <h1
+                className="
+                  text-2xl sm:text-3xl md:text-4xl lg:text-5xl 
+                  font-bold text-white 
+                  leading-snug sm:leading-tight"
+              >
+                AutoBudgeting
+              </h1>
+              <p
+                className="
+                  text-xs sm:text-sm md:text-base lg:text-lg 
+                  text-palantir-gray-3 
+                  max-w-xs sm:max-w-md md:max-w-2xl
+                  mt-2"
+              >
                 Intelligent budget optimization and financial planning
-              </p>
+              </p> */}
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <ArrowPathIcon className="w-4 h-4 text-green-4 animate-spin" />
-              <span className="text-sm text-palantir-gray-4">
-                Auto-optimizing budget
-              </span>
-            </div>
+          {/* Status */}
+          <div className="flex items-center space-x-2 -ml-5 sm:-ml-7">
+            <ArrowPathIcon
+              className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-green-4 animate-spin"
+            />
+            <span
+              className="
+                text-sm sm:text-base md:text-lg lg:text-xl 
+                text-palantir-gray-4 font-medium
+              "
+            >
+              Auto-optimizing budget
+            </span>
+          </div>
 
+          {/* Tombol (AI Optimize + Export) */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <button
               onClick={() => setShowOptimizationModal(true)}
-              className="btn-primary px-4 py-2 rounded-lg flex items-center space-x-2"
+              className="
+                btn-primary 
+                px-3 py-2 md:px-4 md:py-2 
+                rounded-lg flex items-center space-x-2
+                text-sm md:text-base
+              "
             >
               <LightBulbIcon className="w-4 h-4" />
               <span>AI Optimize</span>
             </button>
 
-            <button className="btn-secondary px-4 py-2 rounded-lg flex items-center space-x-2">
+            <button
+              className="
+                btn-secondary 
+                px-3 py-2 md:px-4 md:py-2 
+                rounded-lg flex items-center space-x-2
+                text-sm md:text-base
+              "
+            >
               <ArrowDownTrayIcon className="w-4 h-4" />
               <span>Export Budget</span>
             </button>
+            
           </div>
         </div>
       </div>

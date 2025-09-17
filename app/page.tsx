@@ -138,19 +138,32 @@ export default function LandingPage() {
               animate={{ opacity: 1, x: 0 }}
               className="flex items-center space-x-6"
             >
-              <Link
-                href="/login"
-              className="text-black hover:text-gray-800 transition-colors font-bold"
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
-                className="bg-white text-black hover:bg-gray-200 px-6 py-2 rounded-lg font-medium
-                transition-all duration-700 ease-in-out transform hover:-translate-y-0.5 hover:shadow-lg"
-              >
-                Get Started
-              </Link>
+            <div className="flex items-center gap-3 sm:gap-4 flex-col xs:flex-row">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <Link
+                  href="/login"
+                  className="
+                    text-black hover:text-gray-800 transition-colors font-bold
+                    text-sm sm:text-base
+                  "
+                >
+                  Login
+                </Link>
+
+                <Link
+                  href="/register"
+                  className="
+                    bg-white text-black hover:bg-gray-200
+                    px-4 py-2 sm:px-6 sm:py-2
+                    rounded-lg font-medium
+                    text-sm sm:text-base
+                    transition-all duration-500 ease-in-out transform
+                    hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  Get Started
+                </Link>
+              </div>
+            </div>
             </motion.div>
           </div>
         </div>
@@ -382,25 +395,28 @@ export default function LandingPage() {
                   </span>
                 </div>
                 <div className="space-y-4">
+                  {/* Bot Message */}
                   <div className="flex items-start space-x-3">
                     <div className="rounded-lg flex items-center justify-center flex-shrink-0">
                       <Image
-                        src="/logo.png"   // nama file di folder public
+                        src="/logo.png"
                         alt="Logo"
-                        width={50}
-                        height={50}
+                        width={40}
+                        height={40}
                         className="object-contain"
                       />
-                      </div>
-                    <div className="bg-palantir-dark-gray-2 rounded-lg p-3 max-w-xs">
+                    </div>
+                    <div className="bg-palantir-dark-gray-2 rounded-lg p-3 max-w-[80%] sm:max-w-md break-words">
                       <p className="text-sm text-white">
                         Halo! Saya melihat ada anomali dalam transaksi hari ini.
                         Apakah Anda ingin saya analisis lebih detail?
                       </p>
                     </div>
                   </div>
+
+                  {/* User Message */}
                   <div className="flex items-start space-x-3 justify-end">
-                    <div className="bg-blue-4 rounded-lg p-3 max-w-xs">
+                    <div className="bg-blue-4 rounded-lg p-3 max-w-[80%] sm:max-w-md break-words">
                       <p className="text-sm text-white">
                         Ya, tolong tampilkan breakdown transaksi mencurigakan
                         dalam 24 jam terakhir
@@ -410,28 +426,25 @@ export default function LandingPage() {
                       <span className="text-xs font-bold text-white">You</span>
                     </div>
                   </div>
+                  
+                  {/* Bot Message with Risk Level */}
                   <div className="flex items-start space-x-3">
                     <div className="rounded-lg flex items-center justify-center flex-shrink-0">
-                      <div className="rounded-lg flex items-center justify-center flex-shrink-0">
                       <Image
-                        src="/logo.png"   // nama file di folder public
+                        src="/logo.png"
                         alt="Logo"
-                        width={50}
-                        height={50}
+                        width={40}
+                        height={40}
                         className="object-contain"
                       />
-                      </div>
                     </div>
-                    <div className="bg-palantir-dark-gray-2 rounded-lg p-3 flex-1">
+                    <div className="bg-palantir-dark-gray-2 rounded-lg p-3 w-full sm:max-w-lg min-w-0 break-words overflow-hidden">
                       <p className="text-sm text-white mb-2">
-                        Ditemukan 12 transaksi mencurigakan dengan total Rp
-                        847.500.000
+                        Ditemukan 12 transaksi mencurigakan dengan total Rp 847.500.000
                       </p>
                       <div className="bg-palantir-dark-gray-4 rounded p-2 text-xs">
                         <div className="flex justify-between mb-1">
-                          <span className="text-palantir-gray-4">
-                            Risk Level: High
-                          </span>
+                          <span className="text-palantir-gray-4">Risk Level: High</span>
                           <span className="text-red-4 font-bold">●</span>
                         </div>
                         <div className="w-full bg-palantir-dark-gray-5 rounded-full h-2">
@@ -440,7 +453,7 @@ export default function LandingPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                  </div>
               </div>
             </motion.div>
           </div>
