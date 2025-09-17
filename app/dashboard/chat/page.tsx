@@ -1,4 +1,3 @@
-
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -48,7 +47,11 @@ interface AIMessage extends BaseChatMessage {
 
 type ChatMessage = UserMessage | AIMessage;
 
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+// Fix: Proper dynamic import with loading component
+const Chart = dynamic(() => import("react-apexcharts"), { 
+  ssr: false,
+  loading: () => <div className="h-[200px] bg-palantir-dark-gray-4 rounded-lg animate-pulse"></div>
+});
 
 const chatHistory: ChatMessage[] = [
   {
@@ -149,8 +152,25 @@ export default function AIChatPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentChatHistory, setCurrentChatHistory] =
     useState<ChatMessage[]>(chatHistory);
+  const [isMobile, setIsMobile] = useState(false); // Fix: Add state for mobile detection
+  const [isClient, setIsClient] = useState(false); // Fix: Add client-side check
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Fix: Client-side mounting check
+  useEffect(() => {
+    setIsClient(true);
+    
+    // Fix: Proper mobile detection after component mounts
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -162,6 +182,8 @@ export default function AIChatPage() {
 
   // Close sidebar when clicking outside on mobile
   useEffect(() => {
+    if (!isClient) return; // Fix: Only run on client side
+    
     const handleClickOutside = (event: MouseEvent) => {
       const sidebar = document.getElementById('mobile-sidebar');
       const menuButton = document.getElementById('menu-button');
@@ -176,7 +198,7 @@ export default function AIChatPage() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isSidebarOpen]);
+  }, [isSidebarOpen, isClient]);
 
   const handleSendMessage = async () => {
     if (!message.trim()) return;
@@ -318,6 +340,21 @@ export default function AIChatPage() {
     };
     return colorMap[color] || colorMap.blue;
   };
+
+  // Fix: Return loading state during SSR
+  if (!isClient) {
+    return (
+      <div className="h-[calc(100vh-120px)] md:h-[calc(100vh-120px)] flex bg-transparent relative">
+        <div className="absolute inset-0 bg-white backdrop-blur-sm"></div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-8 h-8 border-4 border-blue-4 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-palantir-gray-3">Loading AI Assistant...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-[calc(100vh-120px)] md:h-[calc(100vh-120px)] flex bg-transparent relative">
@@ -704,9 +741,9 @@ export default function AIChatPage() {
             </motion.button>
           </div>
 
-          {/* Quick prompts - show fewer on mobile */}
+          {/* Fix: Use state-based mobile detection instead of window.innerWidth */}
           <div className="mt-3 md:mt-4 flex flex-wrap gap-2">
-            {quickPrompts.slice(0, window.innerWidth < 768 ? 2 : 3).map((prompt, index) => (
+            {quickPrompts.slice(0, isMobile ? 2 : 3).map((prompt, index) => (
               <button
                 key={index}
                 onClick={() => handlePromptClick(prompt)}
