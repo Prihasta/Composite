@@ -218,72 +218,81 @@ export default function DashboardLayout({
             </div>
 
             <div className="relative">
-                <button
-                  onClick={() => setShowNotifications(!showNotifications)}
-                  className="relative p-2 text-palantir-gray-4 hover:text-white transition-colors"
-                >
-                  <BellIcon className="w-6 h-6" />
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-4 rounded-full"></span>
-                </button>
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2 text-palantir-gray-4 hover:text-white transition-colors"
+              >
+                <BellIcon className="w-6 h-6" />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-4 rounded-full"></span>
+              </button>
 
-                <AnimatePresence>
-                  {showNotifications && (
-                      <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                      className="
-                        dashboard-card 
-                        p-4 sm:p-6 lg:p-8
-                        rounded-xl sm:rounded-2xl 
-                        w-full max-w-full
-                        md:max-w-2xl lg:max-w-4xl
-                        min-h-[400px] sm:min-h-[450px] lg:min-h-[500px]"
-                      >
-                      <div className="p-4 border-b border-palantir-dark-gray-4">
-                        <h3 className="font-bold text-white">Notifikasi</h3>
-                      </div>
-                      <div className="max-h-96 overflow-y-auto">
-                        {notifications.map((notification) => {
-                          const Icon = notification.icon;
-                          return (
-                            <div
-                              key={notification.id}
-                              className="p-4 border-b border-palantir-dark-gray-5 last:border-b-0 hover:bg-palantir-dark-gray-2 transition-colors"
-                            >
-                              <div className="flex items-start space-x-3">
-                                <div
-                                  className={`w-8 h-8 rounded-lg flex items-center justify-center bg-${notification.color}-4/20`}
-                                >
-                                  <Icon
-                                    className={`w-4 h-4 text-${notification.color}-4`}
-                                  />
-                                </div>
-                                <div className="flex-1">
-                                  <h4 className="font-medium text-white text-sm">
-                                    {notification.title}
-                                  </h4>
-                                  <p className="text-palantir-gray-3 text-sm mt-1">
-                                    {notification.message}
-                                  </p>
-                                  <p className="text-palantir-gray-4 text-xs mt-1">
-                                    {notification.time}
-                                  </p>
-                                </div>
+              <AnimatePresence>
+                {showNotifications && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="
+                      absolute top-full right-0 mt-2 z-50
+                      dashboard-card 
+                      p-0
+                      rounded-xl
+                      w-80 sm:w-96
+                      max-h-[500px]
+                      shadow-2xl
+                      border border-palantir-dark-gray-4
+                    "
+                  >
+                    {/* Header */}
+                    <div className="p-4 border-b border-palantir-dark-gray-4">
+                      <h3 className="font-bold text-white">Notifikasi</h3>
+                    </div>
+                    
+                    {/* Notifications List */}
+                    <div className="max-h-80 overflow-y-auto">
+                      {notifications.map((notification) => {
+                        const Icon = notification.icon;
+                        return (
+                          <div
+                            key={notification.id}
+                            className="p-4 border-b border-palantir-dark-gray-5 last:border-b-0 hover:bg-palantir-dark-gray-2 transition-colors"
+                          >
+                            <div className="flex items-start space-x-3">
+                              <div
+                                className={`w-8 h-8 rounded-lg flex items-center justify-center bg-${notification.color}-4/20 flex-shrink-0`}
+                              >
+                                <Icon
+                                  className={`w-4 h-4 text-${notification.color}-4`}
+                                />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-white text-sm">
+                                  {notification.title}
+                                </h4>
+                                <p className="text-palantir-gray-3 text-sm mt-1 line-clamp-2">
+                                  {notification.message}
+                                </p>
+                                <p className="text-palantir-gray-4 text-xs mt-1">
+                                  {notification.time}
+                                </p>
                               </div>
                             </div>
-                          );
-                        })}
-                      </div>
-                      <div className="p-4 border-t border-palantir-dark-gray-4">
-                        <button className="w-full text-center text-blue-4 hover:text-blue-5 text-sm font-medium transition-colors">
-                          Lihat Semua Notifikasi
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    
+                    {/* Footer */}
+                    <div className="p-4 border-t border-palantir-dark-gray-4">
+                      <button className="w-full text-center text-blue-4 hover:text-blue-5 text-sm font-medium transition-colors">
+                        Lihat Semua Notifikasi
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             </div>
           </div>
         </header>

@@ -389,7 +389,7 @@ export default function SalesForecastingPage() {
               <select
                 value={forecastHorizon}
                 onChange={(e) => setForecastHorizon(e.target.value)}
-                className="bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-lg px-3 py-2 text-white text-sm focus:border-blue-4 focus:ring-1 focus:ring-blue-4"
+                className="bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-lg px-3 py-2 text-white text-sm focus:border-blue-4 focus:ring-1 focus:ring-blue-4 w-full sm:w-auto min-w-0 flex-1 sm:flex-none"
               >
                 <option value="6months">6 Months</option>
                 <option value="12months">12 Months</option>
@@ -400,7 +400,7 @@ export default function SalesForecastingPage() {
               <select
                 value={selectedSegment}
                 onChange={(e) => setSelectedSegment(e.target.value)}
-                className="bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-lg px-3 py-2 text-white text-sm focus:border-blue-4 focus:ring-1 focus:ring-blue-4"
+                className="bg-palantir-dark-gray-3 border border-palantir-dark-gray-4 rounded-lg px-3 py-2 text-white text-sm focus:border-blue-4 focus:ring-1 focus:ring-blue-4 w-full sm:w-auto min-w-0 flex-1 sm:flex-none"
               >
                 <option value="all">All Segments</option>
                 <option value="b2b">B2B Only</option>
